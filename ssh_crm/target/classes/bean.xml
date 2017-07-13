@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        ">
+        
+    <!-- 配置c3p0连接池 -->
+  	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+    	<!--  注入属性值  -->
+    	 <property name="driverClass" value="com.mysql.jdbc.Driver"></property>
+    	 <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/ssh_crm?useUnicode=true&amp;characterEncoding=utf-8"></property>
+    	 <property name="user" value="root"></property>
+    	 <property name="password" value=""></property>
+    </bean>
+   
+    
+    <!-- sessionFactory的创建 -->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+    	<!-- 注入数据源 -->
+    	<property name="dataSource" ref="dataSource"></property>
+    	<property name="configLocations" value="classpath:hibernate.cfg.xml"></property>
+    </bean>
+	
+	<!-- 事务管理器 -->
+	<bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<!-- 开启事务的注解 -->
+	<tx:annotation-driven transaction-manager="transactionManager"/> 
+	<!-- 导入user模块的配置文件 -->
+	<import resource="classpath:user.xml" />
+	<!-- 导入customer模块的配置文件 -->
+	<import resource="classpath:customer.xml" />
+	<!-- 导入联系人的模块的配置文件 -->
+	<import resource="classpath:linkman.xml"/>
+	<!-- 导入拜访的模块的配置文件 -->
+	<import resource="classpath:visit.xml"/>
+	<!-- 导入数据字典（用户级别）的配置文件 -->
+	<import resource="classpath:dict.xml"/>
+</beans>

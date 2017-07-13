@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        ">
+        
+    <!-- 在userAction中注入userService对象 -->
+	<bean id="visitAction" class="com.coderli.action.VisitAction" scope="prototype">
+		<property name="visitService" ref="visitService"></property>
+		<property name="customerService" ref="customerService"></property>
+		<property name="userService" ref="userService"></property>
+	</bean>
+	
+	<!-- 在userService中注入userDao实际注入userDaoImpl对象 -->
+	<bean id="visitService" class="com.coderli.service.VisitService">
+		<property name="visitDao" ref="visitDaoImpl"></property>
+	</bean>
+	
+	<!-- 在userDaoImpl中注入hibernateTemplate对象 -->
+	<bean id="visitDaoImpl" class="com.coderli.dao.VisitDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+</beans>
